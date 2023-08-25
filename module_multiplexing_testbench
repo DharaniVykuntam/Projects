@@ -1,5 +1,5 @@
 module stream_multiplexing_tb#(
- parameter T_CLK=10)();
+ parameter T_CLK=250)();
 
 localparam string DS1_STREAM = "C:/Users/bhoom/Desktop/ds1.txt";
 localparam string DS2_STREAM = "C:/Users/bhoom/Desktop/ds2.txt";
@@ -36,23 +36,23 @@ end
 
 always@(posedge clk) begin
      count1= count1+1;
-     if(count1==10) begin
+     if(count1==5) begin
         clk1=~clk1;
         count1=0;
      end
      count2=count2+1;
-     if(count2==500)begin
+     if(count2==250)begin
         clk2=~clk2;
         count2=0;
      end
      count3=count3+1;
-     if(count3==50000)begin
+     if(count3==250000)begin
         clk3=~clk3;
         count3=0;
      end
 end
 
-always #5 clk = ~clk; //it as  an  acutal 100 MHZ clk,if requires we can check in the simulation also because here time scale is "ns" so, 10 ns is equal to 100 mhz
+always #1 clk = ~clk; //lets take is as a 100 mhz
   
   
   //assigng 1khz clk to symbol_clk;
