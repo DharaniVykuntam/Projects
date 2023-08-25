@@ -4,7 +4,7 @@
 //IF T_CLK= 10,i.e total time period is 20 cycles aso here i am checking 50 MHZ clk.
 //IF T_CLK= 50000,i.e total time period is 100000 cycles aso here i am checking 1 KHZ clk.
 module stream_multiplexing#(
-    parameter  T_CLK=10)
+    parameter  T_CLK=250)
 (
 input  clk,
 input [31:0] switch_cycles,
