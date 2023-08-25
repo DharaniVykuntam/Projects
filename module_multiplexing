@@ -1,0 +1,44 @@
+`timescale 1ns / 1ps
+//////////////////////////////////////////////////////////////////////////////////
+//HERE T_CLK= 500,i.e total time period is 1000 cycles aso here i am checking 1 MHZ clk.
+//IF T_CLK= 10,i.e total time period is 20 cycles aso here i am checking 50 MHZ clk.
+//IF T_CLK= 50000,i.e total time period is 100000 cycles aso here i am checking 1 KHZ clk.
+module stream_multiplexing#(
+    parameter  T_CLK=500)
+(
+input  clk,
+input [31:0] switch_cycles,
+input [3:0]DS1,
+input [4:0]DS2,
+input [5:0] DS3,
+input [1:0]mode,
+input symbol_clk,
+output logic [5:0]multiplexed_data);
+
+logic [5:0]out1;
+logic [5:0]out2;
+logic [5:0]out3;
+integer one_third;
+integer two_third;
+
+assign one_third =(0.333333333)*(2*T_CLK);
+assign two_third = (0.666666667)*(2*T_CLK);
+initial begin
+$display("one_third= %d \n two_third = %d",one_third,two_third);
+end
+
+
+//here i have changed the multiplexed_data for every posedge of symbol_clk
+  assign  out1 = (mode==1)?((switch_cycles>=0)&&(switch_cycles<2*T_CLK))?DS1:0:0;   
+  
+  //here i have changed the output for every half period of the symbol_clk
+  assign out2 = (mode==2)?((switch_cycles>=0)&&(switch_cycles<T_CLK))?DS1:(((switch_cycles>=T_CLK)&&(switch_cycles<2*T_CLK))?DS2:0):0;
+  
+  //here i have changed the output for every (1/3)of symbol_clk
+  assign out3 = (mode==3)?(switch_cycles>=0)&&(switch_cycles<one_third)?DS1:((switch_cycles>=one_third)&&(switch_cycles<two_third))?DS2:(switch_cycles>=two_third)&&(switch_cycles<2*T_CLK)?DS3:0:0;
+
+
+assign  multiplexed_data = (mode == 1) ? out1 : ((mode == 2) ? out2 : ((mode == 3) ? out3 : 0));
+
+    
+endmodule
